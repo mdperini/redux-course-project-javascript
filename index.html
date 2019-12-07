@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Todos/Goals</title>
 </head>
 <body>
@@ -45,7 +42,7 @@
 
             const dispatch = (action) => {
                 state = reducer(state, action)
-                listeners.forEach((kistener) => listener())
+                listeners.forEach((listener) => listener())
             }
 
             return {
@@ -62,7 +59,7 @@
         const ADD_GOAL = 'ADD_GOAL'
         const REMOVE_GOAL = 'REMOVE_GOAL'
 
-        const addTodoAction = (todo) => {
+        const addTodoAction = (todo) =>  {
             return {
                 type: ADD_TOTO,
                 todo
@@ -140,7 +137,7 @@
             document.getElementById('todos').innerHTML = ''
 
             goals.forEach(addGoalToDOM)
-            todos.forEach(addTodosToDOM)
+            todos.forEach(addTodoToDOM)
         })
 
         // DOM code
@@ -188,7 +185,7 @@
         }
         
         const addTodo = () => {
-            const input = doument.getElementById('todo')
+            const input = document.getElementById('todo')
             const name = input.value
             input.value = ''
 
@@ -199,7 +196,7 @@
         } 
 
         const addGoal = () => {
-            const inout = document.getElementById('goal')
+            const input = document.getElementById('goal')
             const name = input.value
             input.value = ''
 
