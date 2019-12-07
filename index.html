@@ -20,17 +20,6 @@
 
     <script type='text/javascript'>
         const generateId = () => Math.random().toString(36).substring(2) + (new Date()).getTime().toString();
-                    listeners = listeners.filter((l) => l !== listener)
-                }
-            }
-
-            const dispatch = (action) => {
-                state = reducer(state, action)
-                listeners.forEach((listener) => listener())
-            }
-
-            return {
-                getState,
      
         // App code
         const ADD_TODO = 'ADD_TODO'
