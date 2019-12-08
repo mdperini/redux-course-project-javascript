@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <title>Todos/Goals</title>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
+    <script src='https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js'></script>
+    <script src='https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/babel-standalone@6.15.0/babel.min.js'></script>
 </head>
 <body>
     <div>
@@ -17,40 +21,16 @@
         <ul id='goals'></ul>
     </div>
 
+    <hr />
+
+    <div id='app'></div>
+
+    <hr />
+
+    <div id='root'></div>
+
     <script type='text/javascript'>
         const generateId = () => Math.random().toString(36).substring(2) + (new Date()).getTime().toString();
-    
-        // Libarary code
-        const createStore = (reducer) => {
-            // The store should have 4 parts
-            // 1. The state
-            // 2. Get the state. (getState)
-            // 3. Listen to changes on the store. (subscribe)
-            // 4. Update the state. (dispatch)
-
-            let state
-            let listeners = []
-
-            const getState = () => state
-
-            const subscribe = (listener) => {
-                listeners.push(listener)
-                return () => {
-                    listeners = listeners.filter((l) => l !== listener)
-                }
-            }
-
-            const dispatch = (action) => {
-                state = reducer(state, action)
-                listeners.forEach((listener) => listener())
-            }
-
-            return {
-                getState,
-                subscribe,
-                dispatch
-            }
-        }
         
         // App code
         const ADD_TODO = 'ADD_TODO'
@@ -94,6 +74,29 @@
             }
         }
 
+        const checker = (store) => (next) => (action) => {
+            if (action.type === ADD_TODO &&
+                action.todo.name.toLowerCase().indexOf('bitcoin') !== -1) {
+                return alert(`Nope. That's a bad idea.`)
+            }
+
+            if (action.type === ADD_GOAL &&
+                action.goal.name.toLowerCase().indexOf('bitcoin') !== -1) {
+                return alert(`Nope. That's a bad idea.`)
+            }
+
+            return next(action)
+        }
+
+        const logger = (store) => (next) => (action) => {
+            console.group(action.type)
+            console.log(`The action: ${JSON.stringify(action)}`)
+            const result = next(action)
+            console.log(`The next state: ${JSON.stringify(store.getState())}`)
+            console.groupEnd()
+            return result;
+        }
+
         // Reducer function(s)
         const todos = (state = [], action) => {
             switch(action.type) {
@@ -121,14 +124,10 @@
             }
         }
 
-        const app = (state = {}, action)  => {
-            return {
-                todos: todos(state.todos, action),
-                goals: goals(state.goals, action)
-            }
-        }
-
-        const store = createStore(app)
+        const store = Redux.createStore(Redux.combineReducers({
+            todos,
+            goals
+        }), Redux.applyMiddleware(checker, logger))
 
         store.subscribe(() => {
             const { goals, todos } = store.getState()
@@ -213,6 +212,98 @@
             .addEventListener('click', addGoal)
 
 
+    </script>
+    <script type='text/babel'>
+        const List = (props) => {
+            return (
+                <ul>
+                  <li>List</li>  
+                </ul>
+            )
+        }
+
+        class Todos extends React.Component {
+            render() {
+                return (
+                    <div>
+                        TODOS
+
+                        <List />
+                    </div>
+                )
+            }
+        }
+
+        class Goals extends React.Component {
+            render() {
+                return (
+                    <div>
+                        GOALS
+
+                        <List />
+                    </div>
+                )
+            }
+        }
+
+        class App extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Todos />
+                        <Goals />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('app')
+        )
+    </script>
+    <script type='text/babel'>
+        const List = (props) => {
+            return (
+                <ul>
+                  <li>List</li>  
+                </ul>
+            )
+        }
+
+        const Todos = () => {
+            return (
+                <div>
+                    TODOS
+
+                    <List />
+                </div>
+            )
+        }
+
+        const Goals = () => {
+            return (
+                <div>
+                    GOALS
+
+                    <List />
+                </div>
+            )
+        }
+
+        const App = () => {
+            return (
+                <div>
+                    <Todos />
+                    <Goals />
+                </div>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
     </script>
 </body>
 </html>
