@@ -3,8 +3,8 @@
 <head>
     <title>Todos/Goals</title>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
-    <script src='https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js'></script>
-    <script src='https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/react@16.7.0-alpha.0/umd/react.development.js'></script>
+    <script src='https://unpkg.com/react-dom@16.7.0-alpha.0/umd/react-dom.development.js'></script>
     <script src='https://unpkg.com/babel-standalone@6.15.0/babel.min.js'></script>
 </head>
 <body>
@@ -288,13 +288,33 @@
             )
         }
 
-        const Todos = () => {
+        const Todos = (store) => {
+            const [input, setInput] = React.useState('')
+           const inputRef = React.useRef('')
+
+            const addItem = (e) => {
+                e.preventDefault()
+                //const name = inputRef.value
+               // inputRef.value = ''
+                
+                // store.dispatch(addTodoAction({
+                //     id: generateId(),
+                //     name,
+                //     complete: false
+                // }))
+            }
+
             return (
                 <div>
-                    TODOS
-
-                    <List />
-                </div>
+                    <h1>Todo List</h1>
+                    <input
+                        type='text'
+                        placeholder='Add Todo'
+                        ref={inputRef}
+                        />
+                    <button onClick={addItem}>Add Todo</button>
+                    <List /> 
+                </div>                       
             )
         }
 
@@ -309,9 +329,10 @@
         }
 
         const App = () => {
+            const [store, setStore] = React.useState(store)
             return (
                 <div>
-                    <Todos />
+                    <Todos value={store}/>
                     <Goals />
                 </div>
             )
