@@ -288,20 +288,20 @@
             )
         }
 
-        const Todos = (store) => {
-            const [input, setInput] = React.useState('')
-           const inputRef = React.useRef('')
-
+        const Todos = ({store}) => {
+            const [name, setName] = React.useState('')
+            const handleChange = (event) => setName(event.target.value)
+  
             const addItem = (e) => {
                 e.preventDefault()
-                //const name = inputRef.value
-               // inputRef.value = ''
                 
-                // store.dispatch(addTodoAction({
-                //     id: generateId(),
-                //     name,
-                //     complete: false
-                // }))
+                store.dispatch(addTodoAction({
+                    id: generateId(),
+                    name,
+                    complete: false
+                }))
+            
+                setName('')
             }
 
             return (
@@ -309,9 +309,12 @@
                     <h1>Todo List</h1>
                     <input
                         type='text'
+                        id='name'
+                        value={name}
                         placeholder='Add Todo'
-                        ref={inputRef}
-                        />
+                        onChange={handleChange}
+                    />
+                    
                     <button onClick={addItem}>Add Todo</button>
                     <List /> 
                 </div>                       
@@ -328,18 +331,17 @@
             )
         }
 
-        const App = () => {
-            const [store, setStore] = React.useState(store)
+        const App = ({store}) => {
             return (
                 <div>
-                    <Todos value={store}/>
+                    <Todos store={store}/>
                     <Goals />
                 </div>
             )
         }
 
         ReactDOM.render(
-            <App />,
+            <App store={store}/>,
             document.getElementById('root')
         )
     </script>
