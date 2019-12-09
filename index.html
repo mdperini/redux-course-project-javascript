@@ -253,12 +253,34 @@
         }
 
         class Goals extends React.Component {
+            addItem = (e) => {
+                e.preventDefault()
+                const name = this.input.value
+                this.input.value = ''
+
+                this.props.store.dispatch(addGoalAction({
+                    id: generateId(),
+                    name
+                }))
+            }
+            removeItem = (goal) => {
+                this.props.store.dispatch(removeGoalAction(goal.id))
+            }
+
             render() {
                 return (
                     <div>
-                        GOALS
-
-                        <List />
+                        <h1>Goals</h1>
+                        <input
+                        type='text'
+                        placeholder='Add Goal'
+                        ref={(input) => this.input = input}
+                        />
+                        <button onClick={this.addItem}>Add Goal</button>
+                        <List 
+                        items={this.props.goals}
+                        remove={this.removeItem}
+                        />
                     </div>
                 )
             }
@@ -273,10 +295,12 @@
 
             render() {
                 const { store } = this.props     
+                const { todos, goals } = store.getState()
+                
                 return (
                     <div>
-                        <Todos store={this.props.store}/>
-                        <Goals />
+                        <Todos todos={todos} store={this.props.store}/>
+                        <Goals goals={goals} store={this.props.store}/>
                     </div>
                 )
             }
@@ -330,11 +354,32 @@
             )
         }
 
-        const Goals = () => {
+        const Goals = ({ store}) => {
+            const [name, setName ] = React.useState('')
+            const handleChange = (e) => setName(e.target.value)
+
+            const addItem = (e) => {
+                e.preventDefault()
+
+                store.dispatch(addGoalAction({
+                    id: generateId(),
+                    name
+                }))
+
+                setName('')
+            }
+
             return (
                 <div>
-                    GOALS
-
+                    <h1>Goals</h1>
+                    <input
+                    type='text'
+                    id='name'
+                    value={name}
+                    placeholder='Add Todo'
+                    onChange={handleChange}
+                    />
+                    <button onClick={addItem}>Add Goal</button>
                     <List />
                 </div>
             )
@@ -344,7 +389,7 @@
             return (
                 <div>
                     <Todos store={store}/>
-                    <Goals />
+                    <Goals store={store}/>
                 </div>
             )
         }
