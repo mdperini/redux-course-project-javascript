@@ -215,10 +215,17 @@
     </script>
     <!--React Components -->
     <script type='text/babel'>
-        const List = (props) => {
+        function List (props) {
             return (
                 <ul>
-                  <li>List</li>  
+                    {props.items.map((item) => (
+                        <li key={item.id}>
+                            <span>
+                            {item.name}
+                            </span>
+                            <button onClick={()=> props.remove(item)}>X</button>
+                        </li>
+                    ))}
                 </ul>
             )
         }
@@ -235,6 +242,9 @@
                     complete: false
                 }))
             }
+            removeItem = (todo) => {
+                this.props.store.dispatch(remoteTodoAction(todo.id))
+            }
 
             render() {
                 return (
@@ -246,7 +256,9 @@
                             ref={(input) => this.input = input}
                             />
                         <button onClick={this.addItem}>Add Todo</button>
-                        <List /> 
+                        <List
+                        items={this.props.todos}
+                        remove={this.removeItem} /> 
                     </div>                       
                 )
             }
@@ -313,7 +325,7 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const List = (props) => {
+        const ListHK = (props) => {
             return (
                 <ul>
                   <li>List</li>  
@@ -321,7 +333,7 @@
             )
         }
 
-        const Todos = ({store}) => {
+        const TodosHK = ({store}) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -349,12 +361,12 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <List /> 
+                    <ListHK /> 
                 </div>                       
             )
         }
 
-        const Goals = ({ store}) => {
+        const GoalsHK = ({ store}) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
@@ -380,7 +392,7 @@
                     onChange={handleChange}
                     />
                     <button onClick={addItem}>Add Goal</button>
-                    <List />
+                    <ListHK />
                 </div>
             )
         }
@@ -388,8 +400,8 @@
         const App = ({store}) => {
             return (
                 <div>
-                    <Todos store={store}/>
-                    <Goals store={store}/>
+                    <TodosHK store={store}/>
+                    <GoalsHK store={store}/>
                 </div>
             )
         }
