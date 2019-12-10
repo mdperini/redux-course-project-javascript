@@ -325,15 +325,22 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const ListHK = (props) => {
+        const ListHK = ({items, remove}) => {
             return (
                 <ul>
-                  <li>List</li>  
+                    {items.map((item) => (
+                        <li key={item.id}>
+                        <span>
+                        {item.name}
+                        </span>
+                        <button onClick={() => remove(item.id)}>X</button>
+                        </li>
+                    ))}  
                 </ul>
             )
         }
 
-        const TodosHK = ({store}) => {
+        const TodosHK = ({todos, store}) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -349,6 +356,10 @@
                 setName('')
             }
 
+            const removeItem = (todo) => {
+                store.dispatch(remoteTodoAction(todo.id))
+            }
+
             return (
                 <div>
                     <h1>Todo List</h1>
@@ -361,7 +372,7 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <ListHK /> 
+                    <ListHK items={todos} remove={removeItem} /> 
                 </div>                       
             )
         }
@@ -392,15 +403,29 @@
                     onChange={handleChange}
                     />
                     <button onClick={addItem}>Add Goal</button>
-                    <ListHK />
+                    
                 </div>
             )
         }
 
         const App = ({store}) => {
+            const { todos, goals } = store.getState()
+            const [, updateState] = React.useState();
+
+            const forceUpdate = React.useCallback(() => updateState({}), []);
+            
+            // componentDidMount () {
+                React.useEffect(() => {
+                    // const { store } = this.props
+
+                    store.subscribe(() => forceUpdate())
+                    console.log(`forceUpdate ${JSON.stringify(forceUpdate)}`)     
+                })
+               
+            
             return (
                 <div>
-                    <TodosHK store={store}/>
+                    <TodosHK todos={todos} store={store}/>
                     <GoalsHK store={store}/>
                 </div>
             )
