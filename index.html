@@ -356,7 +356,7 @@
                 setName('')
             }
 
-            const removeItem = (todo) => store.dispatch(remoteTodoAction(todo.id))
+            const removeItem = (id) => store.dispatch(remoteTodoAction(id))
 
             return (
                 <div>
@@ -390,7 +390,7 @@
                 setName('')
             }
 
-            const removeItem = (item) => store.dispatch(removeGoalAction(item.id))
+            const removeItem = (id) => store.dispatch(removeGoalAction(id))
 
             return (
                 <div>
@@ -420,7 +420,9 @@
                     // const { store } = this.props
 
                     store.subscribe(() => forceUpdate())
-                    console.log(`forceUpdate ${JSON.stringify(forceUpdate)}`)     
+                    console.log(`forceUpdate 
+                    todos ${JSON.stringify(todos)} 
+                    goals ${JSON.stringify(goals)}`)     
                 })
                
             
