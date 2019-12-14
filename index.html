@@ -325,7 +325,7 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const ListHK = ({items, remove}) => {
+        const ListHooks = ({items, remove}) => {
             return (
                 <ul>
                     {items.map((item) => (
@@ -340,7 +340,7 @@
             )
         }
 
-        const TodosHK = ({todos, store}) => {
+        const TodosHooks = ({todos, store}) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -370,12 +370,12 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <ListHK items={todos} remove={removeItem} /> 
+                    <ListHooks items={todos} remove={removeItem} /> 
                 </div>                       
             )
         }
 
-        const GoalsHK = ({ goals, store}) => {
+        const GoalsHooks = ({ goals, store}) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
@@ -404,12 +404,12 @@
                     />
                     <button onClick={addItem}>Add Goal</button>
 
-                    <ListHK items={goals} remove={removeItem} />
+                    <ListHooks items={goals} remove={removeItem} />
                 </div>
             )
         }
 
-        const App = ({store}) => {
+        const AppHooks = ({store}) => {
             const { todos, goals } = store.getState()
             const [, updateState] = React.useState();
 
@@ -428,14 +428,14 @@
             
             return (
                 <div>
-                    <TodosHK todos={todos} store={store}/>
-                    <GoalsHK goals={goals} store={store}/>
+                    <TodosHooks todos={todos} store={store}/>
+                    <GoalsHooks goals={goals} store={store}/>
                 </div>
             )
         }
 
         ReactDOM.render(
-            <App store={store}/>,
+            <AppHooks store={store}/>,
             document.getElementById('root')
         )
     </script>
