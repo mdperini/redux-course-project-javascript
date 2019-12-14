@@ -263,7 +263,7 @@
         )
     </script>
     <script type='text/babel'>
-        const List = (props) => {
+        const ListHooks = (props) => {
             return (
                 <ul>
                   <li>List</li>  
@@ -271,7 +271,7 @@
             )
         }
 
-        const Todos = () => {
+        const TodosHooks = () => {
             return (
                 <div>
                     TODOS
@@ -281,27 +281,27 @@
             )
         }
 
-        const Goals = () => {
+        const GoalsHooks = () => {
             return (
                 <div>
                     GOALS
 
-                    <List />
+                    <ListHooks />
                 </div>
             )
         }
 
-        const App = () => {
+        const AppHooks = () => {
             return (
                 <div>
-                    <Todos />
-                    <Goals />
+                    <TodosHooks />
+                    <GoalsHooks />
                 </div>
             )
         }
 
         ReactDOM.render(
-            <App />,
+            <AppHooks />,
             document.getElementById('root')
         )
     </script>
