@@ -70,7 +70,7 @@
 
         const handleAddTodo = (todo) => {
             return (dispatch) => {
-                dispatch(remoteTodoAction(to))
+                dispatch(addTodoAction(todo))
                 return API.saveTodo(todo)
                     .catch(()=> alert(`An error has occurred. Try again.`))
             }
@@ -342,7 +342,7 @@
             const addItem = (e) => {
                 e.preventDefault()
                 
-                store.dispatch(handelAddTodo({
+                store.dispatch(handleAddTodo({
                                                 id: generateId(),
                                                 name,
                                                 complete: false
