@@ -1,6 +1,7 @@
 html, body, #app {
     --evergreen: rgb(0, 80, 47);
     margin: 0;
+    margin-left: 2px;
     width: 100%;
     color: var(--evergreen);
     background-color: #7cffcb;
