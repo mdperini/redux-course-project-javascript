@@ -8,13 +8,10 @@
     <script src='https://unpkg.com/babel-standalone@6.15.0/babel.min.js'></script>
     <script src='https://tylermcginnis.com/goals-todos-api/index.js'></script>
     <link rel="stylesheet" href="./styles.css">
-        
 </head>
 <body>
     <div id='app'></div>
-
     <hr />
-
     <div id='root'></div>
 
     <script type='text/javascript'>
@@ -179,6 +176,11 @@
 
             removeItem = (todo) => {
                 this.props.store.dispatch(remoteTodoAction(todo.id))
+                return API.deleteTodo(todo.id)
+                    .catch(() => {
+                        this.props.store.dispatch(addTodoAction(todo))
+                        alert(`An error occurred. Try again.`)
+                    })
             }
 
             render() {
@@ -213,6 +215,11 @@
             }
             removeItem = (goal) => {
                 this.props.store.dispatch(removeGoalAction(goal.id))
+                return API.deleteGoal(goal.id)
+                    .catch(() => {
+                        this.props.store.dispatch(addGoalAction(goal))
+                        alert(`An error occurred. Try again.`)
+                    })
             }
 
             render() {
@@ -363,7 +370,7 @@
         const App = ({store}) => {
             const { todos, goals, loading } = store.getState()
             const [, updateState] = React.useState();
-
+            const [start, setStart] = React.useState(false);
             const forceUpdate = React.useCallback(() => updateState({}), []);
             
             // componentDidMount () {
@@ -380,7 +387,8 @@
                     console.log(`forceUpdate 
                     todos ${JSON.stringify(todos)} 
                     goals ${JSON.stringify(goals)}`)     
-                }, [todos, goals])
+                    setStart(true)
+                }, start)
                
             if (loading) {
                 return <h3>Loading ...</h3>
