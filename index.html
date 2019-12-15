@@ -288,8 +288,9 @@
 
         class App extends React.Component {
             componentDidMount () {
-                const { store } = this.props
-                store.subscribe(() => this.forceUpdate())
+                const { dispatch } = this.props
+                
+                dispatch(handleInitialData())
             }
 
             render() {
@@ -348,17 +349,17 @@
         //     }
         // }
 
-        const ConnectedTodos = connect((state) => {
-            todos = state.goals
-        })
+        const ConnectedTodos = connect((state) => ({
+            todos: state.todos
+        }))(Todos)
 
-        const ConnectedGoals = connect((state) => {
+        const ConnectedGoals = connect((state) => ({
             goals: state.goals
-        })(Goals)
+        }))(Goals)
 
-        const ConnectedApp = connect((state) => {
-            loading = state.loading
-        })(App) 
+        const ConnectedApp = connect((state) => ({
+            loading: state.loading
+        }))(App) 
         
         // connect: Render any component, passing that component any 
         // data it needs from the store.
@@ -381,16 +382,15 @@
                         const state = getState()
                         const stateNeeded = mapStateToProps(state)
 
-                        return <Component  {...stateNeeded} dispatch={dispatch} />
+                        return <Component  {...stateNeeded} dispatch={dispatch}/>
                     }
                 }
             
-
                 class ConnectedComponent extends React.Component {
                     render() {
                         return (
                             <Context.Consumer>
-                                {(store) => <Receiver store={store} />}
+                             {(store) => <Receiver store={store} />}
                             </Context.Consumer>
                         )
                     }
