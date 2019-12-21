@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Todos/Goals</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
 </head>
 <body>
     <div>
@@ -53,7 +54,7 @@
         }
         
         // App code
-        const ADD_TOTO = 'ADD_TODO'
+        const ADD_TODO = 'ADD_TODO'
         const REMOVE_TODO = 'REMOVE_TODO'
         const TOGGLE_TODO = 'TOGGLE_TODO'
         const ADD_GOAL = 'ADD_GOAL'
@@ -61,7 +62,7 @@
 
         const addTodoAction = (todo) =>  {
             return {
-                type: ADD_TOTO,
+                type: ADD_TODO,
                 todo
             }
         }
@@ -87,17 +88,32 @@
             }
         }
 
-        const removeGoalAction= (id) => {
+        const removeGoalAction = (id) => {
             return {
                 type: REMOVE_GOAL,
                 id
             }
         }
 
+        const checkAndDispatch = (store, action) => {
+            if (action.type === ADD_TODO &&
+                action.todo.name.toLowerCase().indexOf('bitcoin') === -1
+            ) {
+                return alert(`Nope. That's a bad idea`)
+            }
+
+            if (
+                action.type === ADD_GOAL &&
+                action.goal.name.toLowerCase().indexOf('bitcoin') === -1
+            ) {
+                return alert(`Nope. That's a bad idea`)
+            }
+        }
+
         // Reducer function(s)
         const todos = (state = [], action) => {
             switch(action.type) {
-                case ADD_TOTO:
+                case ADD_TODO:
                     return state.concat([action.todo])
                 case REMOVE_TODO:
                     return state.filter((todo) => todo.id !== action.id)
@@ -121,14 +137,10 @@
             }
         }
 
-        const app = (state = {}, action)  => {
-            return {
-                todos: todos(state.todos, action),
-                goals: goals(state.goals, action)
-            }
-        }
-
-        const store = createStore(app)
+        const store = Redux.createStore(Redux.combineReducers({
+            todos,
+            goals
+        }))
 
         store.subscribe(() => {
             const { goals, todos } = store.getState()
