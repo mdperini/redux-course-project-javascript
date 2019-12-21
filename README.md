@@ -1,7 +1,20 @@
-# redux-course-project
- 
-Lecture #28 
+Lecture #28
 
-Logger Middleware
+Utilizing Middleware
 
-appling multiple middlerwares
+Redux
+
+Vanilla JavaScript
+
+Redux createStore combineReducers applyMiddleware
+
+multiple middlwares
+
+checker 
+logger middleware
+
+console.group()
+.
+.
+.
+console.groupEnd();
