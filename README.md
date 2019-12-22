@@ -1,6 +1,6 @@
 # redux-course-project
  
-Lecture #28
+Lecture #29
 
 Vanilla JavaScript
 
