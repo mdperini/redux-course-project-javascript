@@ -271,7 +271,7 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const ListHK = ({items, remove, toggle}) => {
+        const ListHooks = ({items, remove, toggle}) => {
             return (
                 <ul>
                     {items.map((item) => (
@@ -288,7 +288,7 @@
             )
         }
 
-        const TodosHK = ({todos, store}) => {
+        const TodosHooks = ({todos, store}) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -320,12 +320,12 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <ListHK items={todos} remove={removeItem} toggle={toggleItem} /> 
+                    <ListHooks items={todos} remove={removeItem} toggle={toggleItem} /> 
                 </div>                       
             )
         }
 
-        const GoalsHK = ({ goals, store}) => {
+        const GoalsHooks = ({ goals, store}) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
@@ -354,15 +354,15 @@
                     />
                     <button onClick={addItem}>Add Goal</button>
 
-                    <ListHK items={goals} remove={removeItem} />
+                    <ListHooks items={goals} remove={removeItem} />
                 </div>
             )
         }
 
-        const App = ({store}) => {
+        const AppHooks = ({store}) => {
             const { todos, goals, loading } = store.getState()
             const [, updateState] = React.useState();
-
+            const [init, setInit] = React.useState(false)
             const forceUpdate = React.useCallback(() => updateState({}), []);
             
             // componentDidMount () {
@@ -379,7 +379,8 @@
                     console.log(`forceUpdate 
                     todos ${JSON.stringify(todos)} 
                     goals ${JSON.stringify(goals)}`)     
-                }, [todos, goals])
+                    setInit(true)
+                }, [init])
                
             if (loading) {
                 return <h3>Loading ...</h3>
@@ -387,14 +388,14 @@
             
             return (
                 <div>
-                    <TodosHK todos={todos} store={store}/>
-                    <GoalsHK goals={goals} store={store}/>
+                    <TodosHooks todos={todos} store={store}/>
+                    <GoalsHooks goals={goals} store={store}/>
                 </div>
             )
         }
 
         ReactDOM.render(
-            <App store={store}/>,
+            <AppHooks store={store}/>,
             document.getElementById('root')
         )
     </script>
