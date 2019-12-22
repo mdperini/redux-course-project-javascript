@@ -280,7 +280,7 @@
         )
     </script>
     <script type='text/babel'>
-        const List = (props) => {
+        const ListHooks = (props) => {
             return (
                 <ul>
                   <li>List</li>  
@@ -288,7 +288,7 @@
             )
         }
 
-        const Todos = ({store}) => {
+        const TodosHooks = ({ store }) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -316,32 +316,32 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <List /> 
+                    <ListHooks /> 
                 </div>                       
             )
         }
 
-        const Goals = () => {
+        const GoalsHooks = () => {
             return (
                 <div>
                     GOALS
 
-                    <List />
+                    <ListHooks />
                 </div>
             )
         }
 
-        const App = ({store}) => {
+        const AppHooks = ({store}) => {
             return (
                 <div>
-                    <Todos store={store}/>
-                    <Goals />
+                    <TodosHooks store={store}/>
+                    <GoalsHooks />
                 </div>
             )
         }
 
         ReactDOM.render(
-            <App store={store}/>,
+            <AppHooks store={store}/>,
             document.getElementById('root')
         )
     </script>
