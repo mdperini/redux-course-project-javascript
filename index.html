@@ -307,7 +307,7 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const List = (props) => {
+        const ListHooks = (props) => {
             return (
                 <ul>
                   <li>List</li>  
@@ -315,7 +315,7 @@
             )
         }
 
-        const Todos = ({store}) => {
+        const TodosHooks = ({store}) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
   
@@ -343,12 +343,12 @@
                     />
                     
                     <button onClick={addItem}>Add Todo</button>
-                    <List /> 
+                    <ListHooks /> 
                 </div>                       
             )
         }
 
-        const Goals = ({ store}) => {
+        const GoalsHooks = ({ store}) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
@@ -374,16 +374,16 @@
                     onChange={handleChange}
                     />
                     <button onClick={addItem}>Add Goal</button>
-                    <List />
+                    <ListHooks />
                 </div>
             )
         }
 
-        const App = ({store}) => {
+        const AppHooks = ({store}) => {
             return (
                 <div>
-                    <Todos store={store}/>
-                    <Goals store={store}/>
+                    <TodosHooks store={store}/>
+                    <GoalsHooks store={store}/>
                 </div>
             )
         }
