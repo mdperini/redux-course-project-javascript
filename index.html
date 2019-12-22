@@ -78,12 +78,12 @@
             }
         }
 
-        const handleToggleTodo = (todo) => {
+        const handleToggle = (id) => {
             return (dispatch) => {
-                dispatch(toggleTodoAction(todo.id))
-                return API.toggleTodo(todo.id)
+                dispatch(toggleTodoAction(id))
+                return API.saveTodoToggle(id)
                     .catch(() => {
-                        dispatch(toggleTodoAction(todo.id))
+                        dispatch(toggleTodoAction(id))
                         alert(`An error occurred. Try again.`)
                     })
             }
@@ -113,7 +113,7 @@
                 dispatch(removeGoalAction(goal.id))
                 return API.deleteGoal(goal.id)
                     .catch(()=> {
-                        dispatch.addGoalAction(goal)
+                        dispatch(addGoalAction(goal))
                         alert(`An error occurred. Try again.`)
                     })
             }
@@ -224,7 +224,7 @@
             addItem = (e) => {
                 e.preventDefault()
                 const name = this.input.value
-                this.props.store.dispatch(handleAddTodo({
+                this.props.dispatch(handleAddTodo({
                               id: generateId(),
                               name,
                               complete: false
@@ -233,9 +233,9 @@
                 this.input.value = ''
             }
 
-            toggleItem = (id) =>  this.props.dispatch(handleToggleTodo(todo.id))
+            toggleItem = (id) =>  this.props.dispatch(handleToggle(id))
                 
-            removeItem = (todo) => this.props.store.dispatch(handleDeleteTodo(todo))
+            removeItem = (todo) => this.props.dispatch(handleDeleteTodo(todo))
 
             render() {
                 return (
@@ -256,17 +256,22 @@
             }
         }
 
+        const ConnectedTodos = ReactRedux.connect((state) => ({
+            todos: state.todos
+        }))(Todos)
+
+
         class Goals extends React.Component {
             addItem = (e) => {
                 e.preventDefault()
                 const name = this.input.value
             
-                this.props.store.dispatch(handleAddGoal({ id: generateId(), name }))
+                this.props.dispatch(handleAddGoal({ id: generateId(), name }))
                         
                 this.input.value = ''
             }
 
-            removeItem = (goal) => this.props.store.dispatch(handleDeleteGoal(goal))
+            removeItem = (goal) => this.props.dispatch(handleDeleteGoal(goal))
 
             render() {
                 return (
@@ -286,6 +291,10 @@
                 )
             }
         }
+        
+        const ConnectedGoals = ReactRedux.connect((state) => ({
+            goals: state.goals
+        }))(Goals)
 
         class App extends React.Component {
             componentDidMount () {
@@ -310,22 +319,10 @@
             }
         }
 
-        const ConnectedTodos = ReactRedux.connect((state) => ({
-            todos: state.todos
-        }))(Todos)
-
-        const ConnectedGoals = ReactRedux.connect((state) => ({
-            goals: state.goals
-        }))(Goals)
-
         const ConnectedApp = ReactRedux.connect((state) => ({
             loading: state.loading
         }))(App) 
         
-        // connect: Render any component, passing that component any 
-        // data it needs from the store.
-        const Context = React.createContext()
-
         ReactDOM.render(
             <ReactRedux.Provider store={store}>
                 <ConnectedApp />
@@ -352,13 +349,13 @@
             )
         }
 
-        const TodosHooks = ({todos, store}) => {
+        const TodosHooks = ({ todos, dispatch }) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
             const addItem = (e) => {
                 e.preventDefault()
                 
-                store.dispatch(handleAddTodo({
+                dispatch(handleAddTodo({
                                                 id: generateId(),
                                                 name,
                                                 complete: false
@@ -367,8 +364,8 @@
                 setName('')             
             }
 
-            const toggleItem = (id) => store.dispatch(handleToggleTodo(todo.id))
-            const removeItem = (item) => store.dispatch(handleDeleteTodo(item))
+            const toggleItem = (id) => dispatch(handleToggle(id))
+            const removeItem = (item) => dispatch(handleDeleteTodo(item))
                 
             return (
                 <div>
@@ -387,13 +384,18 @@
             )
        }
 
-        const GoalsHooks = ({ goals, store}) => {
+       const ConnectedTodosHooks = ReactRedux.connect((state, dispatch)=> ({
+           todos: state.todos, 
+           dispatch
+       }))(TodosHooks)
+       
+        const GoalsHooks = ({ goals, dispatch }) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
             const addItem = (e) => {
                 e.preventDefault()
-                store.dispatch(handleAddGoal({
+                dispatch(handleAddGoal({
                             id: generateId(),
                             name
                         }))
@@ -401,7 +403,7 @@
                 setName('')
             }
 
-            const removeItem = (item) => store.dispatch(handleDeleteGoal(item))
+            const removeItem = (item) => dispatch(handleDeleteGoal(item))
 
             return (
                 <div>
@@ -420,20 +422,20 @@
             )
         }
 
-        const AppHooks = ({store}) => {
-            const { todos, goals, loading } = store.getState()
+        const ConnectedGoalsHooks = ReactRedux.connect((state, dispatch ) => ({
+            goals: state.goals, 
+            dispatch
+        }))(GoalsHooks)
+
+        const AppHooks = ({ loading, dispatch }) => {
             const [, updateState] = React.useState();
             const [start, setStart] = React.useState(false);
             const forceUpdate = React.useCallback(() => updateState({}), []);
             
             // componentDidMount () {
                 React.useEffect(() => {
-                    store.dispatch(handleInitialData())
+                    dispatch(handleInitialData())
                     
-                    store.subscribe(() => forceUpdate())
-                    console.log(`forceUpdate 
-                    todos ${JSON.stringify(todos)} 
-                    goals ${JSON.stringify(goals)}`)     
                     setStart(true)
                 }, start)
                
@@ -443,14 +445,21 @@
             
             return (
                 <div>
-                    <TodosHooks todos={todos} store={store}/>
-                    <GoalsHooks goals={goals} store={store}/>
+                    <ConnectedTodosHooks/>
+                    <ConnectedGoalsHooks />
                 </div>
             )
         }
 
+        const ConnectedAppHooks = ReactRedux.connect((state, dispatch) => ({
+            loading: state.loading,
+            dispatch
+        }))(AppHooks)
+
         ReactDOM.render(
-            <AppHooks store={store}/>,
+            <ReactRedux.Provider store={store}>
+                <ConnectedAppHooks />
+            </ReactRedux.Provider>,
             document.getElementById('root')
         )
     </script>
