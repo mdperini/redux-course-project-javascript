@@ -107,6 +107,11 @@
     console.log(Array.from([1, 2, 3], x => x + x));
     console.log(Array.from(orders, x => x.rate));
     console.log(`minMax2 ${minMax2(Array.from(orders, x => x.rate))}`);
+
+    const [minRate, maxRate ] = minMax2(Array.from(orders, x => x.rate))
+    console.log(`min ${minRate} max ${maxRate}`);
+
+
     </script>    
 
     <script type='text/javascript'>
