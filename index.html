@@ -28,6 +28,86 @@
     <hr />
 
     <div id='root'></div>
+    <script type='text/javascript'>
+    const orders = [
+        {
+            id: 1,
+            rate: 0.016999,
+            direction: 'Sell',
+            quantity: 1000000,
+            ccypair: 'EUR/USD'
+        },
+        {
+            id: 1,
+            rate: 0.014564,
+            direction: 'Sell',
+            quantity: 1000000,
+            ccypair: 'EUR/USD'
+        },
+        {
+            id: 1,
+            rate: 0.014564,
+            direction: 'Sell',
+            quantity: 1000000,
+            ccypair: 'EUR/USD'
+        },
+        {
+            id: 1,
+            rate: 0.014564,
+            direction: 'Sell',
+            quantity: 1000000,
+            ccypair: 'EUR/USD'
+        },
+        {
+            id: 1,
+            rate: 0.011118,
+            direction: 'Buy',
+            quantity: 1000000,
+            ccypair: 'USD/JPY'
+        }
+    ]
+
+    orders.forEach((order) => {
+            console.group(order.ccypair)
+            console.log(`${JSON.stringify(order)}`)
+            console.groupEnd()
+            })
+
+    const reducer = (total, order) =>  total + order.quantity;
+    const total = orders.reduce(reducer, 0)
+    console.log(total)        
+    const areTheSame = (order) => order.direction === 'Sell';
+    const answer = orders.filter((order) => order.ccypair === 'EUR/USD')
+                        .every(areTheSame)
+    console.log(answer)        
+    const answer2 = orders.every(areTheSame)
+    console.log(answer2)        
+
+    function minMax(items) {
+        const minMaxArray = items.reduce(function (r, n) {
+                r[0] = (!r[0])? n : Math.min(r[0], n);
+                r[1] = (!r[1])? n : Math.max(r[1], n);
+                return r;
+            }, []);
+
+        return minMaxArray;
+    }
+
+    const [min, max ] = minMax([4, 1, 2, 7, 6])
+    console.log(`min ${min} max ${max}`);
+
+    function minMax2(items) {
+       return items.reduce((acc, val) => {
+            acc[0] = ( acc[0] === undefined || val < acc[0] ) ? val : acc[0]
+            acc[1] = ( acc[1] === undefined || val > acc[1] ) ? val : acc[1]
+            return acc;
+        }, []);
+    }
+
+    console.log(Array.from([1, 2, 3], x => x + x));
+    console.log(Array.from(orders, x => x.rate));
+    console.log(`minMax2 ${minMax2(Array.from(orders, x => x.rate))}`);
+    </script>    
 
     <script type='text/javascript'>
         const generateId = () => Math.random().toString(36).substring(2) + (new Date()).getTime().toString();
